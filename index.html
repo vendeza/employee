@@ -22,14 +22,18 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-3">Сотрудник</div>
-            <div class="col-md-3"><button id="employeeSelect" type="button" class="btn btn-primary">Выбрать</button></div>
+            <div class="col-md-3">Сотрудник
+
+            </div>
+            <div class="col-md-3"><button id="employeeSelect" type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#myModal">Выбрать</button></div>
         </div>
         <div class="row">
             <div class="col-md-3">Должность</div>
-            <div class="col-md-3"><button type="button" class="btn btn-primary">Выбрать</button></div>
+            <div class="col-md-3"><button type="button" id="position" type="button" class="btn btn-primary"
+                    data-toggle="modal" data-target="#myModal">Выбрать</button></div>
         </div>
-        <div class="row">
+        <div class=" row">
             <div class="col-md-3">Организация</div>
             <div class="col-md-3"><button type="button" class="btn btn-primary">Выбрать</button></div>
         </div>
@@ -44,35 +48,102 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Modal Header</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
                 </div>
-                <div class="modal-body">
-                    <p>Some text in the modal.</p>
+                <div id="tableData" class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-toggle="modal" data-id="1" data-target="#orderModal" class="clickable-row">
+                                <td>1</td>
+                                <td>24234234</td>
+                                <td>A</td>
+                            </tr>
+                            <tr data-toggle="modal" data-id="2" data-target="#orderModal" class="clickable-row">
+                                <td>2</td>
+                                <td>24234234</td>
+                                <td>A</td>
+                            </tr>
+                            <tr data-toggle="modal" data-id="3" data-target="#orderModal" class="clickable-row">
+                                <td>3</td>
+                                <td>24234234</td>
+                                <td>A</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal"
+                        data-dismiss="modal">OK</button>
+                    <button type="button" id="close" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
 
         </div>
     </div>
     <script>
-        $("#employeeSelect").click(function () {
-            console.log("!!!");
-            $("#myModal").modal();
-        });
+        // $("#employeeSelect").click(function () {
+        //     console.log("!!!");
+        //     $("#myModal").modal();
+        // });
+        
         $('#myModal').on('show.bs.modal', function (event) {
             console.log($(event));
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('whatever') // Extract info from data-* attributes
+            console.log(button[0].id, 'button');
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            modal.find('.modal-title').text('New message to ' + recipient)
-            modal.find('.modal-body input').val(recipient)
-        })
+            //modal.find('.modal-title').text('New message to ' + recipient)
+            // modal.find('.modal-body input').val(recipient)
+        });
+
+        // $('#myModal').on('hidden.bs.modal', function (event) {
+        //     console.log($(event));
+        //     console.log("CLOSE");
+        //     // do something…
+        // });
+        var rowData;
+        $('#myModal .modal-footer button').on('click', function (event) {
+            var $button = $(event.target);
+            console.log($button[0].id, " $(event");
+            console.log(rowData);
+            // $(this).closest('.modal').one('hidden.bs.modal', function () {
+            //     alert('The buttons id that closed the modal is: #' + $button[0].id);
+            // });
+        });
+
+        $(".table-striped").find('tr[data-id]').on('click', function () {
+            //debugger;
+
+            //do all your operation populate the modal and open the modal now. DOnt need to use show event of modal again
+            $(this).addClass('active').siblings().removeClass('active');
+            $('#orderDetails').html($('<b> Order Id selected: ' + $(this).data('id') + '</b>'));
+            rowData = $(this).data('id');
+
+
+        });
+
+        $('#tableData').on('click', '.clickable-row', function (event) {
+            $(this).addClass('active').siblings().removeClass('active');
+        });
+        
     </script>
+    <style>
+        .clickable-row.active{
+            background-color: #aaa !important;
+        }
+    </style>
 </body>
 
 </html>
