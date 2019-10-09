@@ -15,6 +15,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.core.js"></script>
+    <script src="main.js"></script>
 </head>
 
 <body>
@@ -24,33 +26,56 @@
             <div class="col-md-3">Сотрудник
 
             </div>
-            <div class="col-md-3"><button id="person" type="button" class="btn btn-primary" data-toggle="modal"
+            <div class="col-md-5"><button id="person" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#myModal">Выбрать</button>
-                <p id="selectedPerson"></p>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mt-3"></div>
+                        <p id="selectedPerson"></p>
+                    </div>
+                </div>
+
+
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-3">Должность</div>
-            <div class="col-md-3"><button type="button" id="position" type="button" class="btn btn-primary"
+            <div class="col-md-5"><button type="button" id="position" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#myModal">Выбрать</button>
-                <p id="selectedPosition"></p>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mt-3"></div>
+                        <p id="selectedPosition"></p>
+                    </div>
+                </div>
             </div>
         </div>
         <br>
         <div class=" row">
             <div class="col-md-3">Организация</div>
-            <div class="col-md-3"><button type="button" class="btn btn-primary" id="orgs" data-toggle="modal"
+            <div class="col-md-5"><button type="button" class="btn btn-primary" id="orgs" data-toggle="modal"
                     data-target="#myModal">Выбрать</button>
-                <p id="selectedOrgs"></p>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mt-3"></div>
+                        <p id="selectedOrgs"></p>
+                    </div>
+                </div>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-3">Подразделение</div>
-            <div class="col-md-3"><button type="button" class="btn btn-primary" id="subs" data-toggle="modal"
+            <div class="col-md-5"><button type="button" class="btn btn-primary" id="subs" data-toggle="modal"
                     data-target="#myModal">Выбрать</button>
-                <p id="selectedSubs"></p>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mt-3"></div>
+                        <p id="selectedSubs"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -60,23 +85,17 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title" id="headerModal"></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
                 </div>
                 <div id="tableData" class="modal-body">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>Фамилия</th>
-                                <th>Имя</th>
-                                <th>Отчество</th>
-                                <th>Дата рождения</th>
-                            </tr>
+
                         </thead>
                         <tbody>
-                          
+
                         </tbody>
                     </table>
 
@@ -90,83 +109,9 @@
 
         </div>
     </div>
-    <script>
-       
-        var windowId;
-        $('#myModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever') // Extract info from data-* attributes
-            var buttonId = button[0].id;
-            windowId = buttonId;
 
-            var modal = $(this);
-            if (buttonId === 'person') {
-                $.getJSON("persons.json", function (data) {
-                    console.log(data);
-                    data.forEach(function (i, index) {
-                        $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td>' + i.lastname + '</td><td>' + i.middlename + '</td><td>' + i.firstname + '</td><td>' + i.birthday + '</td></tr>');
-                    })
-                });
-            }
-            if (buttonId === 'position') {
-                $.getJSON("persons.json", function (data) {
-                    console.log(data);
-                    data.forEach(function (i, index) {
-                        $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td>' + i.lastname + '</td><td>' + i.middlename + '</td><td>' + i.firstname + '</td><td>' + i.birthday + '</td></tr>');
-                    })
-                });
-            }
-            if (buttonId === 'orgs') {
-                $.getJSON("persons.json", function (data) {
-                    console.log(data);
-                    data.forEach(function (i, index) {
-                        $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td>' + i.lastname + '</td><td>' + i.middlename + '</td><td>' + i.firstname + '</td><td>' + i.birthday + '</td></tr>');
-                    })
-                });
-            }
-            if (buttonId === 'subs') {
-                $.getJSON("persons.json", function (data) {
-                    console.log(data);
-                    data.forEach(function (i, index) {
-                        $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td>' + i.lastname + '</td><td>' + i.middlename + '</td><td>' + i.firstname + '</td><td>' + i.birthday + '</td></tr>');
-                    })
-                });
-            }
-        });
-
-       
-        var selectedPerson;
-        var selectedPosition;
-        var selectedOrgs;
-        var selectedSubs;
-
-        $('#myModal .modal-footer button').on('click', function (event) {
-            var $button = $(event.target);
-            console.log($button[0].id, " $(event");
-            console.log(selectedPerson);
-            if (windowId === 'person') {
-                $('#selectedPerson').text(selectedPerson);
-            }
-            if (windowId === 'position') {
-                $('#selectedPosition').text(selectedPerson);
-            }
-            if (windowId === 'orgs') {
-                $('#selectedOrgs').text(selectedPerson);
-            }
-            if (windowId === 'subs') {
-                $('#selectedSubs').text(selectedPerson);
-            }
-        });
-
-        
-
-        $('#tableData').on('click', '.clickable-row', function (event) {
-            $(this).addClass('active').siblings().removeClass('active');
-            selectedPerson = $(this).attr('data-id');
-            console.log(selectedPerson);
-        });
-    </script>
-    
+    <script src="main.js"></script>
+    <script src="services.js"></script>
     <style>
         .clickable-row.active {
             background-color: #aaa !important;
