@@ -1,7 +1,10 @@
 'use strict';
-
+// пофиксить подтверждние строки
 var windowId;
 var minAge = '1.1.1990';
+var minAgeNumber = 20;
+var objSection = {};
+
 // показываем окно выбора
 $('#myModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
@@ -94,8 +97,6 @@ function getConcatOrgsAndSubs(orgs, subs) {
 
             if (sub.org_id === org.id) {
                 sub.nameOrg = org.name;
-                console.log(sub.org_id, "sub.org_id");
-                console.log(org.id, "org.id");
             }
             return sub.org_id === org.id;
         });
@@ -122,7 +123,9 @@ function getRemoveButtonHTMLById(id) {
 
 
 
+
 //подтверждение выбора строки или закрытия окна
+// TODO: FIX ERROR MODAL WINDOW
 $('#myModal .modal-footer button').on('click', function (event) {
     var $button = $(event.target);
     if ($button[0].id !== 'ok') {
@@ -135,34 +138,55 @@ $('#myModal .modal-footer button').on('click', function (event) {
         var minAgeValue = moment(minAge);
         if (minAgeValue > birthDay) {
 
-            // $('#modalConfirm').on('show.bs.modal', function (event) {
-            //    console.log("!!!!!!!!!");
-            // });
+            $('#modalConfirm').modal();
 
-            // $("#modalConfirm .modalConfirmOk").on("click","modalConfirmOk", function(){
-            //     console.log("!@!@!@");
-            //  });
+            $('#modalConfirm .modal-footer #modalConfirmOk').on('click', function (event) {
+                console.log("OK");
+                var firstName = selectedRow.find('#firstName').text();
+                var middleName = selectedRow.find('#middleName').text();
+                var lastName = selectedRow.find('#lastName').text();
+
+                var buttonRemove = getRemoveButtonHTMLById('removePerson');
+
+                $('#selectedPerson').text(lastName + ' ' + middleName + ' ' + firstName).append(buttonRemove);
+
+                $('#removePerson').on('click', function (event) {
+                    $('#selectedPerson').html("");
+                });
+            })
+
         }
 
-        var firstName = selectedRow.find('#firstName').text();
-        var middleName = selectedRow.find('#middleName').text();
-        var lastName = selectedRow.find('#lastName').text();
 
-        var buttonRemove = getRemoveButtonHTMLById('removePerson');
-
-        $('#selectedPerson').text(lastName + ' ' + middleName + ' ' + firstName).append(buttonRemove);
-
-        $('#removePerson').on('click', function (event) {
-            $('#selectedPerson').html("");
-        });
     }
 
     if (windowId === 'position') {
-        var buttonRemove = getRemoveButtonHTMLById('removePosition');
-        $('#selectedPosition').text(selectedRow.find('#name').text()).append(buttonRemove);
-        $('#removePosition').on('click', function (event) {
-            $('#selectedPosition').html("");
-        });
+        var birthDay = parseInt(selectedRow.find('#minAge').text());
+
+
+        //var birthDay = selectedRow.find('#minAge').text();
+
+        if (minAgeNumber < birthDay) {
+            $('#modalConfirm').modal();
+
+            $('#modalConfirm .modal-footer #modalConfirmOk').on('click', function (event) {
+                console.log("OK");
+
+                var buttonRemove = getRemoveButtonHTMLById('removePosition');
+                $('#selectedPosition').text(selectedRow.find('#name').text()).append(buttonRemove);
+                $('#removePosition').on('click', function (event) {
+                    $('#selectedPosition').html("");
+                });
+
+            })
+
+        } else {
+            var buttonRemove = getRemoveButtonHTMLById('removePosition');
+            $('#selectedPosition').text(selectedRow.find('#name').text()).append(buttonRemove);
+            $('#removePosition').on('click', function (event) {
+                $('#selectedPosition').html("");
+            });
+        }
     }
     if (windowId === 'orgs') {
         var buttonRemove = getRemoveButtonHTMLById('removeOrgs');
@@ -180,6 +204,7 @@ $('#myModal .modal-footer button').on('click', function (event) {
     }
     $('#tableData table').html("");
 });
+
 
 
 //выбор строки
