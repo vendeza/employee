@@ -1,6 +1,7 @@
 'use strict';
 
 var windowId;
+var minAge = '1.1.1990';
 // показываем окно выбора
 $('#myModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
@@ -9,67 +10,84 @@ $('#myModal').on('show.bs.modal', function (event) {
     windowId = buttonId;
 
     if (buttonId === 'person') {
-        getPersons().then(function (data) {
-            $('#headerModal').html("");
-            $('#headerModal').append('Сотрудник');
-            $('#tableData table').append('<tr><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Дата рождения</th></tr>');
-            data.forEach(function (i) {
-                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="lastName">' + i.lastname +
-                    '</td><td id="middleName">' + i.middlename + '</td><td id="firstName">' + i.firstname + '</td><td>' + i.birthday + '</td></tr>');
-            })
-        });
+        getPersonView();
     }
     if (buttonId === 'position') {
-        $('#headerModal').html("");
-        $('#headerModal').append('Должность');
-        getPositions().then(function (data) {
-            console.log(data);
-            $('#tableData table').append('<tr><th>Должность</th><th>Минимальный возраст</th><th>Максимальный возраст</th></tr>');
-            data.forEach(function (i) {
-                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
-                    '</td><td id="maxAge">' + i.max_age + '</td></tr>');
-            })
-        });
+        getPositionView();
     }
     if (buttonId === 'orgs') {
-        $('#headerModal').html("");
-        $('#headerModal').append('Выбор организации');
-        getOrgs().then(function (data) {
-            $('#tableData table').append('<tr><th>Название</th><th>Страна</th></tr>');
-            data.forEach(function (i) {
 
-                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
-                    i.name + '</td><td id="country">' + i.country + '</td></tr>');
-            })
-        });
-
+        getOrgsView();
     }
     if (buttonId === 'subs') {
-        $('#headerModal').html("");
-        $('#headerModal').append('Выбор организации');
-        getSubs().then(function (subs) {
-            getOrgs().then(function (orgs) {
-                var subsAndOrgs = getConcatOrgsAndSubs(orgs, subs);
-                subsAndOrgs.sort(function (a, b) {
-                    if (a.name < b.name) { return -1; }
-                    if (a.name > b.name) { return 1; }
-                    return 0;
-                })
-                
-                $('#tableData table').append('<tr><th>Название</th><th>Организация</th></tr>');
-                subsAndOrgs.forEach(function (i) {
-
-                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
-                        i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
-                })
-            });
-
-
-        });
+        getSubsView();
     }
 });
 
+// функции формирования представления
+function getPersonView() {
+    getPersons().then(function (data) {
+        console.log(data[3].birthday);
 
+        $('#headerModal').html("");
+        $('#headerModal').append('Сотрудник');
+        $('#tableData table').append('<tr><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Дата рождения</th></tr>');
+        data.forEach(function (i) {
+            $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="lastName">' + i.lastname +
+                '</td><td id="middleName">' + i.middlename + '</td><td id="firstName">' + i.firstname + '</td><td id="birthDay">' + i.birthday + '</td></tr>');
+        })
+    });
+}
+function getPositionView() {
+    $('#headerModal').html("");
+    $('#headerModal').append('Должность');
+    getPositions().then(function (data) {
+        console.log(data);
+        $('#tableData table').append('<tr><th>Должность</th><th>Минимальный возраст</th><th>Максимальный возраст</th></tr>');
+        data.forEach(function (i) {
+            $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
+                '</td><td id="maxAge">' + i.max_age + '</td></tr>');
+        })
+    });
+}
+function getOrgsView() {
+    $('#headerModal').html("");
+    $('#headerModal').append('Выбор организации');
+    getOrgs().then(function (data) {
+        $('#tableData table').append('<tr><th>Название</th><th>Страна</th></tr>');
+        data.forEach(function (i) {
+
+            $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
+                i.name + '</td><td id="country">' + i.country + '</td></tr>');
+        })
+    });
+}
+
+function getSubsView() {
+    $('#headerModal').html("");
+    $('#headerModal').append('Выбор организации');
+    getSubs().then(function (subs) {
+        getOrgs().then(function (orgs) {
+            var subsAndOrgs = getConcatOrgsAndSubs(orgs, subs);
+            subsAndOrgs.sort(function (a, b) {
+                if (a.name < b.name) { return -1; }
+                if (a.name > b.name) { return 1; }
+                return 0;
+            })
+
+            $('#tableData table').append('<tr><th>Название</th><th>Организация</th></tr>');
+            subsAndOrgs.forEach(function (i) {
+
+                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
+                    i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
+            })
+        });
+
+
+    });
+}
+
+//объединяет два массива по ключу
 function getConcatOrgsAndSubs(orgs, subs) {
     var result = orgs.map(function (org) {
         var filteredArr = subs.filter(function (sub) {
@@ -102,6 +120,8 @@ function getRemoveButtonHTMLById(id) {
     return '<button type="button" class="close" id="' + id + '" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
 }
 
+
+
 //подтверждение выбора строки или закрытия окна
 $('#myModal .modal-footer button').on('click', function (event) {
     var $button = $(event.target);
@@ -111,6 +131,19 @@ $('#myModal .modal-footer button').on('click', function (event) {
     }
 
     if (windowId === 'person') {
+        var birthDay = moment(selectedRow.find('#birthDay').text(), "DD/MM/YYYY");
+        var minAgeValue = moment(minAge);
+        if (minAgeValue > birthDay) {
+
+            // $('#modalConfirm').on('show.bs.modal', function (event) {
+            //    console.log("!!!!!!!!!");
+            // });
+
+            // $("#modalConfirm .modalConfirmOk").on("click","modalConfirmOk", function(){
+            //     console.log("!@!@!@");
+            //  });
+        }
+
         var firstName = selectedRow.find('#firstName').text();
         var middleName = selectedRow.find('#middleName').text();
         var lastName = selectedRow.find('#lastName').text();
