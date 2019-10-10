@@ -3,12 +3,24 @@
 var windowId;
 var minAge = '1.1.1990';
 var minAgeNumber = 20;
-var objSection = {};
+var selectedRow = {
+    selectPersonalRow:null,
+    selectPositionRow:null
+};
+var selectPersonalRow;
+var selectPositionRow;
+var rowsId = {
+    person: null,
+    position: null,
+    orgs: null,
+    subs: null
+};
 
 // показываем окно выбора
 $('#myModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
 
+    var button = $(event.relatedTarget);
+    if (!button[0]) return;
     var buttonId = button[0].id;
     windowId = buttonId;
 
@@ -85,12 +97,10 @@ function getSubsView() {
                     i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
             })
         });
-
-
     });
 }
 
-//объединяет два массива по ключу
+//объединяет массива организаций и подразделений по ключу
 function getConcatOrgsAndSubs(orgs, subs) {
     var result = orgs.map(function (org) {
         var filteredArr = subs.filter(function (sub) {
@@ -122,10 +132,7 @@ function getRemoveButtonHTMLById(id) {
 }
 
 
-
-
 //подтверждение выбора строки или закрытия окна
-// TODO: FIX ERROR MODAL WINDOW
 $('#myModal .modal-footer button').on('click', function (event) {
     var $button = $(event.target);
     if ($button[0].id !== 'ok') {
@@ -134,60 +141,77 @@ $('#myModal .modal-footer button').on('click', function (event) {
     }
 
     if (windowId === 'person') {
-        var birthDay = moment(selectedRow.find('#birthDay').text(), "DD/MM/YYYY");
+        var birthDay = moment(selectPersonalRow.find('#birthDay').text(), "DD/MM/YYYY");
         var minAgeValue = moment(minAge);
         if (minAgeValue > birthDay) {
 
+            //вызов окна преждения о возрасте
             $('#modalConfirm').modal();
 
+            //Если подтвердили ОК строки в окне подтверждения
             $('#modalConfirm .modal-footer #modalConfirmOk').on('click', function (event) {
-                console.log("OK");
-                var firstName = selectedRow.find('#firstName').text();
-                var middleName = selectedRow.find('#middleName').text();
-                var lastName = selectedRow.find('#lastName').text();
-
-                var buttonRemove = getRemoveButtonHTMLById('removePerson');
-
-                $('#selectedPerson').text(lastName + ' ' + middleName + ' ' + firstName).append(buttonRemove);
-
-                $('#removePerson').on('click', function (event) {
-                    $('#selectedPerson').html("");
-                });
+                setPersonHTML();
+                console.log("FUCK!!!!");
+                $('#modalConfirm .modal-footer #modalConfirmOk').unbind();
+                
+            })
+            
+            //Если нажали отмена в окне прдепрждения
+            $('#modalConfirm .modal-footer #modalConfirmCancel').on('click', function (event) {
+                $('#modalConfirm').modal('toggle');
+                $('#myModal').modal();
+                getPersonView();
             })
 
+        } else {
+            //Если подтвердили ОК строки в окне подтверждения
+            setPersonHTML();
         }
+    }
+    //Формирование предстваления для персонала под кнопкой выбор
+    function setPersonHTML() {
+        console.log("setPersonHTML");
+        console.log(selectPersonalRow.find('#firstName').text(),"selectPersonalRow");
 
+        var firstName = selectPersonalRow.find('#firstName').text();
+        var middleName = selectPersonalRow.find('#middleName').text();
+        var lastName = selectPersonalRow.find('#lastName').text();
 
+        var buttonRemove = getRemoveButtonHTMLById('removePerson');
+
+        $('#selectedPerson').text(lastName + ' ' + middleName + ' ' + firstName).append(buttonRemove);
+
+        $('#removePerson').on('click', function (event) {
+            $('#selectedPerson').html("");
+        });
     }
 
+
     if (windowId === 'position') {
-        var birthDay = parseInt(selectedRow.find('#minAge').text());
-
-
-        //var birthDay = selectedRow.find('#minAge').text();
+        var birthDay = parseInt(selectPositionRow.find('#minAge').text());
 
         if (minAgeNumber < birthDay) {
             $('#modalConfirm').modal();
 
             $('#modalConfirm .modal-footer #modalConfirmOk').on('click', function (event) {
-                console.log("OK");
-
-                var buttonRemove = getRemoveButtonHTMLById('removePosition');
-                $('#selectedPosition').text(selectedRow.find('#name').text()).append(buttonRemove);
-                $('#removePosition').on('click', function (event) {
-                    $('#selectedPosition').html("");
-                });
-
+                setPositionalHTML();
+                $('#modalConfirm .modal-footer #modalConfirmOk').unbind();
             })
 
         } else {
-            var buttonRemove = getRemoveButtonHTMLById('removePosition');
-            $('#selectedPosition').text(selectedRow.find('#name').text()).append(buttonRemove);
-            $('#removePosition').on('click', function (event) {
-                $('#selectedPosition').html("");
-            });
+            setPositionalHTML();
         }
     }
+
+    function setPositionalHTML() {
+        console.log(selectPositionRow.find('#name'), "setPositionalHTML!!!!!!!!!!");
+        var buttonRemove = getRemoveButtonHTMLById('removePosition');
+        $('#selectedPosition').text(selectPositionRow.find('#name').text()).append(buttonRemove);
+        $('#removePosition').on('click', function (event) {
+            $('#selectedPosition').html("");
+        });
+    }
+
     if (windowId === 'orgs') {
         var buttonRemove = getRemoveButtonHTMLById('removeOrgs');
         $('#selectedOrgs').text(selectedRow.find('#name').text()).append(buttonRemove);
@@ -210,6 +234,13 @@ $('#myModal .modal-footer button').on('click', function (event) {
 //выбор строки
 $('#tableData').on('click', '.clickable-row', function (event) {
     $(this).addClass('active').siblings().removeClass('active');
+
+    // switch (windowId){
+    //     case 'personal':
+    //         selected
+    // }
+    selectPersonalRow = $(this);
+    selectPositionRow = $(this);
     selectedRow = $(this);
-    console.log(selectedRow);
+    console.log(selectedRow.find('#name').text());
 });
