@@ -1,5 +1,10 @@
-// Формирует надпись под кнопкой Ввод и привзяывает к ней кнопку удалить.
+
+'use strict';
+
+// Под кнопкой ввод формирует выбранную надпись и привзяывает к ней кнопку удалить 
 // Проверяет на возраст. Если возраст больше то выдает окно подтверждения.
+
+
 function person() {
     if (!selectedPersonRow) {
         alert('Выберете значение');
@@ -51,7 +56,6 @@ function setPersonHTML() {
 
         $('#selectedPerson').html("");
     });
-    //selectedPersonRow = null;
 
 }
 
@@ -64,6 +68,7 @@ function position() {
     var birthDay = parseInt(selectedPositionRow.find('#minAge').text());
 
     if (minAgeNumber < birthDay) {
+        //вызов окна преждения о возрасте
         $('#modalConfirm').modal();
 
         $('#modalConfirm .modal-footer #modalConfirmOk').on('click', function (event) {

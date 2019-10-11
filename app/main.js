@@ -90,7 +90,7 @@ $('#myModal .modal-footer button').on('click', function (event) {
 
 
 
-//выбор строки
+//выбор строки в окне
 $('#tableData').on('click', '.clickable-row', function (event) {
     $(this).addClass('active').siblings().removeClass('active');
    
