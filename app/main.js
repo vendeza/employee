@@ -22,10 +22,11 @@ $('#myModal').on('show.bs.modal', function (event) {
         getPositionView();
     }
     if (buttonId === 'orgs') {
-
+        console.log("SUBS!!!");
         getOrgsView();
     }
     if (buttonId === 'subs') {
+        
         getSubsView();
     }
 });

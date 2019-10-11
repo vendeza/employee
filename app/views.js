@@ -30,17 +30,32 @@ function getPersonView(selectedPersonRow) {
 
 
 function getPositionView() {
+
     $('#headerModal').html("");
     $('#tableData table').html("");
     $('#headerModal').append('Должность');
+    $('#tableData table').append('<tr><th>Название</th><th>Минимальный возраст</th><th>Максимальный возраст</th></tr>');
     getPositions().then(function (data) {
-        console.log(data);
-        $('#tableData table').append('<tr><th>Должность</th><th>Минимальный возраст</th><th>Максимальный возраст</th></tr>');
         data.forEach(function (i) {
-            $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
-                '</td><td id="maxAge">' + i.max_age + '</td></tr>');
+
+            //выводим строки и формириуем выделение строки
+            if (selectedPositionRow) {
+                var id = parseInt(i.id);
+                var selectedPositionRowId = parseInt($('#selectedPosition').attr("data-id"));
+                if (id === selectedPositionRowId) {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
+                        '</td><td id="maxAge">' + i.max_age + '</td></tr>');
+                } else {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
+                        '</td><td id="maxAge">' + i.max_age + '</td></tr>');
+                }
+            } else {
+                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
+                    '</td><td id="maxAge">' + i.max_age + '</td></tr>');
+            }
+
         })
-    });
+    })
 }
 function getOrgsView() {
     $('#headerModal').html("");
@@ -49,9 +64,20 @@ function getOrgsView() {
     getOrgs().then(function (data) {
         $('#tableData table').append('<tr><th>Название</th><th>Страна</th></tr>');
         data.forEach(function (i) {
-
-            $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
-                i.name + '</td><td id="country">' + i.country + '</td></tr>');
+            if (selectedOrgsRow) {
+                var id = parseInt(i.id);
+                var selectedOrgsRowId = parseInt($('#selectedOrgs').attr("data-id"));
+                if (id === selectedOrgsRowId) {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="name">' +
+                        i.name + '</td><td id="country">' + i.country + '</td></tr>');
+                } else {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
+                        i.name + '</td><td id="country">' + i.country + '</td></tr>');
+                }
+            } else {
+                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
+                        i.name + '</td><td id="country">' + i.country + '</td></tr>');
+            }
         })
     });
 }
@@ -72,8 +98,21 @@ function getSubsView() {
             $('#tableData table').append('<tr><th>Название</th><th>Организация</th></tr>');
             subsAndOrgs.forEach(function (i) {
 
-                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
-                    i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
+                if (selectedSubsRow) {
+
+                    var id = parseInt(i.id);
+                    var selectedSubsRowwId = parseInt($('#selectedSubs').attr("data-id"));
+                    if (id === selectedSubsRowwId) {
+                        $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="name">' +
+                            i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
+                    } else {
+                        $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
+                            i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
+                    }
+                } else {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="name">' +
+                        i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
+                }
             })
         });
     });

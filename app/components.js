@@ -87,12 +87,14 @@ function setPositionalHTML() {
         $('#tableData table').html("");
         return;
     }
+    var id = parseInt(selectedPositionRow.attr("data-id"));
     var buttonRemove = getRemoveButtonHTMLById('removePosition');
+    $('#selectedPosition').attr('data-id', id);
     $('#selectedPosition').text(selectedPositionRow.find('#name').text()).append(buttonRemove);
     $('#removePosition').on('click', function (event) {
         $('#selectedPosition').html("");
     });
-    selectedPositionRow = null;
+    //selectedPositionRow = null;
 }
 
 function orgs() {
@@ -101,12 +103,14 @@ function orgs() {
         $('#tableData table').html("");
         return;
     }
+    var id = parseInt(selectedOrgsRow.attr("data-id"));
+    $('#selectedOrgs').attr('data-id', id);
     var buttonRemove = getRemoveButtonHTMLById('removeOrgs');
     $('#selectedOrgs').text(selectedOrgsRow.find('#name').text()).append(buttonRemove);
     $('#removeOrgs').on('click', function (event) {
         $('#selectedOrgs').html("");
     });
-    selectedOrgsRow = null;
+    //selectedOrgsRow = null;
 }
 
 function sub() {
@@ -115,11 +119,13 @@ function sub() {
 
         return;
     }
+    var id = parseInt(selectedSubsRow.attr("data-id"));
+    $('#selectedSubs').attr('data-id', id);
 
     var buttonRemove = getRemoveButtonHTMLById('removeSubs');
     $('#selectedSubs').text(selectedSubsRow.find('#name').text()).append(buttonRemove);
     $('#removeSubs').on('click', function (event) {
         $('#selectedSubs').html("");
     });
-    selectedSubsRow = null;
+   // selectedSubsRow = null;
 }
