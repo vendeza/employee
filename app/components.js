@@ -80,6 +80,7 @@ function position() {
         setPositionalHTML();
     }
 }
+
 function setPositionalHTML() {
     if (!selectedPositionRow) {
         alert('Выберете значение');

@@ -59,7 +59,7 @@ function getOrgsView() {
 function getSubsView() {
     $('#headerModal').html("");
     $('#tableData table').html("");
-    $('#headerModal').append('Выбор организации');
+    $('#headerModal').append('Выбор подразделения');
     getSubs().then(function (subs) {
         getOrgs().then(function (orgs) {
             var subsAndOrgs = getConcatOrgsAndSubs(orgs, subs);
