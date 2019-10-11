@@ -1,4 +1,7 @@
 'use strict';
+
+// Формирование окон с соответствующими таблицами
+
 function getPersonView(selectedPersonRow) {
     getPersons().then(function (data) {
         $('#tableData table').html("");

@@ -1,5 +1,5 @@
 'use strict';
-// пофиксить подтверждние строки
+
 var windowId;
 var minAge = '1.1.1990';
 var minAgeNumber = 20;
@@ -8,7 +8,7 @@ var selectedPositionRow;
 var selectedOrgsRow;
 var selectedSubsRow;
 
-// показываем окно выбора
+// показываем окно выбора строк со значениями
 $('#myModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     if (!button[0]) return;
@@ -22,7 +22,6 @@ $('#myModal').on('show.bs.modal', function (event) {
         getPositionView();
     }
     if (buttonId === 'orgs') {
-        console.log("SUBS!!!");
         getOrgsView();
     }
     if (buttonId === 'subs') {
