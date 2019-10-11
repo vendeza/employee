@@ -1,18 +1,37 @@
 'use strict';
-function getPersonView() {
+function getPersonView(selectedPersonRow) {
     getPersons().then(function (data) {
-
+        $('#tableData table').html("");
         $('#headerModal').html("");
         $('#headerModal').append('Сотрудник');
         $('#tableData table').append('<tr><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Дата рождения</th></tr>');
         data.forEach(function (i) {
-            $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="lastName">' + i.lastname +
-                '</td><td id="middleName">' + i.middlename + '</td><td id="firstName">' + i.firstname + '</td><td id="birthDay">' + i.birthday + '</td></tr>');
+            if (selectedPersonRow) {
+
+                var id = parseInt(i.id);
+                var selectedPersonRowId = parseInt($('#selectedPerson').attr("data-id"));
+
+                if (id === selectedPersonRowId) {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="lastName">' + i.lastname +
+                        '</td><td id="middleName">' + i.middlename + '</td><td id="firstName">' + i.firstname + '</td><td id="birthDay">' + i.birthday + '</td></tr>');
+                } else {
+                    $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="lastName">' + i.lastname +
+                        '</td><td id="middleName">' + i.middlename + '</td><td id="firstName">' + i.firstname + '</td><td id="birthDay">' + i.birthday + '</td></tr>');
+                }
+            } else {
+                $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row"><td id="lastName">' + i.lastname +
+                    '</td><td id="middleName">' + i.middlename + '</td><td id="firstName">' + i.firstname + '</td><td id="birthDay">' + i.birthday + '</td></tr>');
+            }
+
+
         })
     });
 }
+
+
 function getPositionView() {
     $('#headerModal').html("");
+    $('#tableData table').html("");
     $('#headerModal').append('Должность');
     getPositions().then(function (data) {
         console.log(data);
@@ -25,6 +44,7 @@ function getPositionView() {
 }
 function getOrgsView() {
     $('#headerModal').html("");
+    $('#tableData table').html("");
     $('#headerModal').append('Выбор организации');
     getOrgs().then(function (data) {
         $('#tableData table').append('<tr><th>Название</th><th>Страна</th></tr>');
@@ -38,6 +58,7 @@ function getOrgsView() {
 
 function getSubsView() {
     $('#headerModal').html("");
+    $('#tableData table').html("");
     $('#headerModal').append('Выбор организации');
     getSubs().then(function (subs) {
         getOrgs().then(function (orgs) {
