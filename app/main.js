@@ -25,7 +25,7 @@ $('#myModal').on('show.bs.modal', function (event) {
         getOrgsView();
     }
     if (buttonId === 'subs') {
-        
+
         getSubsView();
     }
 });
@@ -53,6 +53,7 @@ function getConcatOrgsAndSubs(orgs, subs) {
 
 
 $('#myModal .close').on('click', function (event) {
+    selectedPersonRow = null;
     $('#tableData table').html("");
 });
 
@@ -64,24 +65,41 @@ function getRemoveButtonHTMLById(id) {
 //Выбор строки или закрытие окна
 $('#myModal .modal-footer button').on('click', function (event) {
     var $button = $(event.target);
-
+    //сброс значений если ничего не выбрали
     if ($button[0].id !== 'ok') {
+        
+        if (windowId === 'person') {
+            selectedPersonRow = null;
+        }
+    
+        if (windowId === 'position') {
+            selectedPositionRow = null;
+        }
+    
+        if (windowId === 'orgs') {
+            selectedOrgsRow = null;
+        }
+    
+        if (windowId === 'subs') {
+            selectedSubsRow = null;
+        }
+
         $('#tableData table').html("");
         return;
     }
-
+    // Вывод значения из выбранной строки в соответсвии с окном
     if (windowId === 'person') {
         person();
     }
-  
+
     if (windowId === 'position') {
         position();
     }
-    
+
     if (windowId === 'orgs') {
         orgs();
     }
-  
+
     if (windowId === 'subs') {
         sub();
     }
@@ -93,7 +111,7 @@ $('#myModal .modal-footer button').on('click', function (event) {
 //выбор строки в окне
 $('#tableData').on('click', '.clickable-row', function (event) {
     $(this).addClass('active').siblings().removeClass('active');
-   
+
     if (windowId === 'person') {
         selectedPersonRow = $(this);
     }

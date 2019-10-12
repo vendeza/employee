@@ -9,10 +9,11 @@ function getPersonView(selectedPersonRow) {
         $('#headerModal').append('Сотрудник');
         $('#tableData table').append('<tr><th>Фамилия</th><th>Имя</th><th>Отчество</th><th>Дата рождения</th></tr>');
         data.forEach(function (i) {
-            if (selectedPersonRow) {
+            var selectedPersonRowId = parseInt($('#selectedPerson').attr("data-id"));
+            if (selectedPersonRowId) {
 
                 var id = parseInt(i.id);
-                var selectedPersonRowId = parseInt($('#selectedPerson').attr("data-id"));
+                //var selectedPersonRowId = parseInt($('#selectedPerson').attr("data-id"));
 
                 if (id === selectedPersonRowId) {
                     $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="lastName">' + i.lastname +
@@ -40,11 +41,11 @@ function getPositionView() {
     $('#tableData table').append('<tr><th>Название</th><th>Минимальный возраст</th><th>Максимальный возраст</th></tr>');
     getPositions().then(function (data) {
         data.forEach(function (i) {
-
+            var selectedPositionRowId = parseInt($('#selectedPosition').attr("data-id"));
             //выводим строки и формириуем выделение строки
-            if (selectedPositionRow) {
+            if (selectedPositionRowId) {
                 var id = parseInt(i.id);
-                var selectedPositionRowId = parseInt($('#selectedPosition').attr("data-id"));
+                
                 if (id === selectedPositionRowId) {
                     $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="name">' + i.name + '</td><td id="minAge">' + i.min_age +
                         '</td><td id="maxAge">' + i.max_age + '</td></tr>');
@@ -67,9 +68,10 @@ function getOrgsView() {
     getOrgs().then(function (data) {
         $('#tableData table').append('<tr><th>Название</th><th>Страна</th></tr>');
         data.forEach(function (i) {
-            if (selectedOrgsRow) {
+            var selectedOrgsRowId = parseInt($('#selectedOrgs').attr("data-id"));
+            if (selectedOrgsRowId) {
                 var id = parseInt(i.id);
-                var selectedOrgsRowId = parseInt($('#selectedOrgs').attr("data-id"));
+               
                 if (id === selectedOrgsRowId) {
                     $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="name">' +
                         i.name + '</td><td id="country">' + i.country + '</td></tr>');
@@ -100,11 +102,12 @@ function getSubsView() {
 
             $('#tableData table').append('<tr><th>Название</th><th>Организация</th></tr>');
             subsAndOrgs.forEach(function (i) {
-
-                if (selectedSubsRow) {
+                var selectedSubsRowwId = parseInt($('#selectedSubs').attr("data-id"))
+                //если строка выбрана
+                if (selectedSubsRowwId) {
 
                     var id = parseInt(i.id);
-                    var selectedSubsRowwId = parseInt($('#selectedSubs').attr("data-id"));
+                   ;
                     if (id === selectedSubsRowwId) {
                         $('#tableData table').append('<tr data-id=' + i.id + '" class="clickable-row active"><td id="name">' +
                             i.name + '</td><td id="country">' + i.nameOrg + '</td></tr>');
